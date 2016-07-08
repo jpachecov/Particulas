@@ -1,60 +1,3 @@
-//PARTICULAS
-
-
-function particula(x,y,m,v,d,r,color){
-	this.x = x;
-	this.y = y;
-	this.m = m;
-	this.v = v;
-	this.d = d;
-	this.r = r;
-	this.color = color;
-	this.draw = function(ctx){
-		if(this.x < 0)
-			this.x = 1;
-		if(this.x > 1100)
-			this.x = 1100;
-		if(this.y < 0)
-			this.y = 1;
-		if(this.y > 700)
-			this.y = 700;
-		
-		ctx.fillStyle = color;
-		ctx.beginPath();
-		ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
-		ctx.fill();
-	}
-	this.setPosition = function(all){
-		//console.log("aaa");
-		var dx = 0;
-		var dy = 0;
-		var x  = this.x;
-		var y = this.y;
-		var p = this;
-		all.forEach(function(particle){
-			
-			if(particle.x != x && particle.y != y){
-				dx += (9.8*particle.m*(1/(Math.pow(particle.x - x,2)+Math.pow(particle.y - y,2))))*(particle.x - x);
-				dy += (9.8*particle.m*(1/(Math.pow(particle.x - x,2)+Math.pow(particle.y - y,2))))*(particle.y - y);
-			}
-			//console.log(dx + " "+dy)
-			
-			if(Math.sqrt(Math.pow(particle.x - x,2)+Math.pow(particle.y - y,2)) <= (particle.r + r+10)){
-				//all.splice(all.indexOf(p),1);
-				dx *= 0.1;
-				dy *= 0.1;
-
-			}
-			
-			
-		});
-		this.x += this.v*dx;
-		this.y += this.v*dy;
-	
-	}
-}
-
-
 /*
 * Las figuras a dibujar deben tener implementados los metodos
 * draw  como parte de su propia animacion.
@@ -95,8 +38,7 @@ function sol(x,y,m){
 		this.y += dy;
 	}
 }
-function planeta(x,y,m,direccion,r){
-	this.r = r;
+function planeta(x,y,m,direccion){
 	this.x = x;
 	this.y = y;
 	this.m = m;
@@ -114,7 +56,7 @@ function planeta(x,y,m,direccion,r){
 		
 		ctx.fillStyle = "#7CA6DA";
 		ctx.beginPath();
-		ctx.arc(this.x,this.y,r,0,Math.PI*2,false);
+		ctx.arc(this.x,this.y,3,0,Math.PI*2,false);
       	ctx.shadowColor = '#999';
       	ctx.shadowBlur = 40;
       	ctx.shadowOffsetX = 0;
@@ -131,10 +73,6 @@ function planeta(x,y,m,direccion,r){
 			if(particle.x != x && particle.y != y){
 				dx += (9.8*particle.m*(1/(Math.pow(particle.x - x,2)+Math.pow(particle.y - y,2))))*(particle.x - x);
 				dy += (9.8*particle.m*(1/(Math.pow(particle.x - x,2)+Math.pow(particle.y - y,2))))*(particle.y - y);
-			}
-			if(Math.sqrt(Math.pow(particle.x - x,2)+Math.pow(particle.y - y,2)) <= (particle.r + r)){
-				dx =-1;
-				dy =-1;
 			}
 		});
 
@@ -208,16 +146,12 @@ function esta(){
 	
 	var stat = new state(canvas);
 	var animati = new animation(stat);
-	var color = ["blue","yellow","white","green"]
-	for(var j = 0; j < 150;j++){
-		//stat.shapes.push(new sol(Math.random()*canvas.width,Math.random()*canvas.height,4));
-		stat.shapes.push(new particula(Math.random()*canvas.width,Math.random()*canvas.height,Math.random()*5+3,1,"a",Math.random()*10+3,color[j%color.length]));
+	for(var j = 0; j < 10;j++){
+		stat.shapes.push(new sol(Math.random()*canvas.width,Math.random()*canvas.height,4));
 	}
-	/*
 	for(var i = 0; i < 110; i++){
-		stat.shapes.push(new planeta(Math.random()*canvas.width,Math.random()*canvas.height,2.1,{x:0,y:0},3));
+		stat.shapes.push(new planeta(Math.random()*canvas.width,Math.random()*canvas.height,2.1,{x:0,y:0}));
 	}
-	*/
 		
 	var a = setInterval(function(){
 		animati.draw();
